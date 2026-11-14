@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { GridPattern } from '@/components/GridPattern'
-import { APP_URL, KOFI_URL, SELF_HOST_URL } from '@/lib/site'
+import { APP_STORE_URL, APP_URL, KOFI_URL, SELF_HOST_URL } from '@/lib/site'
 
 export function Footer() {
   return (
@@ -13,6 +13,7 @@ export function Footer() {
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-medium text-slate-900">
           <Link href="/?home">Home</Link>
           <a href={APP_URL}>Open the app</a>
+          <a href={APP_STORE_URL}>App Store</a>
           <Link href="/creeds/">Creeds</Link>
           <Link href="/reformed/">Reformed</Link>
           <Link href="/lutheran/">Lutheran</Link>

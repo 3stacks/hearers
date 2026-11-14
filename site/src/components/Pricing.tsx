@@ -5,7 +5,7 @@ import { CheckIcon } from '@/components/CheckIcon'
 import { Container } from '@/components/Container'
 import { GridPattern } from '@/components/GridPattern'
 import { SectionHeading } from '@/components/SectionHeading'
-import { APP_URL, SELF_HOST_URL } from '@/lib/site'
+import { APP_STORE_URL, APP_URL, SELF_HOST_URL } from '@/lib/site'
 
 function Plan({
   name,
@@ -111,6 +111,18 @@ export function Pricing() {
         <p className="mt-4 max-w-xl text-lg tracking-tight text-slate-600">
           Every feature is in both. The difference is where your progress
           lives.
+        </p>
+        <p className="mt-4 max-w-xl text-lg tracking-tight text-slate-600">
+          On an iPhone, get the free app from the{' '}
+          <a
+            href={APP_STORE_URL}
+            className="font-medium text-brand-600 hover:text-brand-800"
+            data-event="App Store"
+            data-event-label="pricing"
+          >
+            App Store
+          </a>
+          .
         </p>
       </Container>
       <div className="mx-auto mt-16 max-w-5xl lg:px-6">

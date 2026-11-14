@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { appLink } from './appLink.ts'
+import { APPS, appLink, siblingOf } from './appLink.ts'
 
 describe('appLink', () => {
   it('opens a passage or a unit in Hearers', () => {
@@ -36,5 +36,52 @@ describe('appLink', () => {
     expect(appLink('https://ko-fi.com/lukeboyle', 'x')).toBeUndefined()
     expect(appLink('https://precentor.app/psalm/023', 'precentor')).toBeUndefined()
     expect(appLink('http://hearers.app', 'x')).toBeUndefined()
+  })
+
+  it('opens a page of A Method for Prayer', () => {
+    expect(appLink('https://methodforprayer.app/pray', 'x')).toBe('methodforprayer://pray')
+    expect(appLink('https://methodforprayer.app/book/adoration', 'x')).toBe('methodforprayer://book/adoration')
+    expect(appLink('https://methodforprayer.app/privacy/', 'x')).toBeUndefined()
+  })
+})
+
+describe('siblingOf', () => {
+  it('gives the scheme of the sibling app that a link opens', () => {
+    expect(siblingOf('https://precentor.app/psalm/023?tune=dundee', 'hearers')).toBe('precentor')
+    expect(siblingOf('https://haddingtonbible.org/psalms-23#v23-1', 'hearers')).toBe('haddingtonbible')
+    expect(siblingOf('https://covenanthousehold.app/', 'hearers')).toBe('covenanthousehold')
+    expect(siblingOf('https://methodforprayer.app/pray', 'hearers')).toBe('methodforprayer')
+    expect(siblingOf('https://hearers.app/app/#/add/Ps.23', 'precentor')).toBe('hearers')
+  })
+
+  it('gives undefined for the app itself, other pages and other sites', () => {
+    expect(siblingOf('https://hearers.app/app/#/add/Ps.23', 'hearers')).toBeUndefined()
+    expect(siblingOf('https://precentor.app/about', 'hearers')).toBeUndefined()
+    expect(siblingOf('https://ko-fi.com/lukeboyle', 'hearers')).toBeUndefined()
+  })
+})
+
+describe('APPS', () => {
+  it('has a name for each app and the App Store page of each app on the store', () => {
+    expect(APPS.hearers).toEqual({ name: 'Hearers', appStore: 'https://apps.apple.com/app/id6834307677' })
+    expect(APPS.precentor).toEqual({ name: 'Precentor', appStore: 'https://apps.apple.com/app/id6834265380' })
+    expect(APPS.covenanthousehold).toEqual({
+      name: 'Covenant Household',
+      appStore: 'https://apps.apple.com/app/id6834362234',
+    })
+    expect(APPS.haddingtonbible.appStore).toBeUndefined()
+    expect(APPS.methodforprayer.appStore).toBeUndefined()
+  })
+
+  it('has an entry for each scheme that appLink opens', () => {
+    for (const url of [
+      'https://hearers.app',
+      'https://precentor.app',
+      'https://haddingtonbible.org',
+      'https://covenanthousehold.app',
+      'https://methodforprayer.app',
+    ]) {
+      expect(APPS[siblingOf(url, 'x') ?? '']).toBeDefined()
+    }
   })
 })

@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import clsx from 'clsx'
 
 import { ANALYTICS_LOADER } from '@/lib/analytics'
-import { SITE_URL } from '@/lib/site'
+import { APP_STORE_ID, SITE_URL } from '@/lib/site'
 import '@/styles/tailwind.css'
 
 const inter = Inter({
@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   description:
     'Memorise the Reformed and Lutheran catechisms, the creeds and Scripture, one clause at a time. Free in your browser. Self-host it to sync your devices.',
   icons: { icon: '/app/icon.svg' },
+  // The Smart App Banner of Safari on the iPhone: it opens or gets the app.
+  itunes: { appId: APP_STORE_ID },
 }
 
 // A visitor who uses the app goes straight to it. "/?home", a link from inside

@@ -4,6 +4,9 @@ export const APP_URL = '/app/'
 export const SELF_HOST_URL = '/docs/self-hosting/'
 export const REPO_URL = 'https://github.com/3stacks/hearers'
 export const KOFI_URL = 'https://ko-fi.com/lukeboyle'
+/** The App Store page of the iPhone app. Apple sends each visitor to the store of the visitor's country. */
+export const APP_STORE_ID = '6834307677'
+export const APP_STORE_URL = `https://apps.apple.com/app/id${APP_STORE_ID}`
 
 export type Tradition = 'common' | 'reformed' | 'lutheran'
 

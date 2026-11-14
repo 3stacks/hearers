@@ -1,11 +1,19 @@
 import * as WebBrowser from 'expo-web-browser'
-import { Linking } from 'react-native'
-import { appLink } from './appLink.ts'
+import { Alert, Linking, Platform } from 'react-native'
+import { APPS, appLink, siblingOf } from './appLink.ts'
+
+/** Open `url` in the in-app browser. */
+async function browse(url: string) {
+  await WebBrowser.openBrowserAsync(url).catch(() => {
+    // The browser did not open. There is nothing more to do.
+  })
+}
 
 /**
  * Open a link (the Self-Interpreting Bible, further reading, a source). A link
- * to Precentor, Covenant Household or Haddington Bible opens that app when it
- * is on the device. Any other link, or a sibling app that is not installed,
+ * to Precentor, Covenant Household, Haddington Bible or A Method for Prayer
+ * opens that app when it is on the device. On an iPhone without that app, a
+ * dialog offers the App Store page of the app or the website. Any other link
  * opens in the in-app browser.
  */
 export function open(url: string) {
@@ -16,11 +24,23 @@ export function open(url: string) {
         await Linking.openURL(app)
         return
       } catch {
-        // The app is not on the device. Open the website.
+        // The app is not on the device.
+      }
+      const sibling = APPS[siblingOf(url, 'hearers') ?? '']
+      const store = sibling?.appStore
+      if (Platform.OS === 'ios' && sibling && store) {
+        Alert.alert(
+          `${sibling.name} is not on this iPhone`,
+          `Get ${sibling.name} free from the App Store, or open the website.`,
+          [
+            { text: 'App Store', onPress: () => void Linking.openURL(store).catch(() => browse(store)) },
+            { text: 'Website', onPress: () => void browse(url) },
+            { text: 'Cancel', style: 'cancel' },
+          ],
+        )
+        return
       }
     }
-    await WebBrowser.openBrowserAsync(url).catch(() => {
-      // The browser did not open. There is nothing more to do.
-    })
+    await browse(url)
   })()
 }

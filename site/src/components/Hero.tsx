@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 import { Button } from '@/components/Button'
 import { GridPattern } from '@/components/GridPattern'
-import { APP_URL, SELF_HOST_URL } from '@/lib/site'
+import { APP_STORE_URL, APP_URL, SELF_HOST_URL } from '@/lib/site'
 import heroImage from '@/images/screens/hero.png'
 
 function Verse() {
@@ -62,12 +62,15 @@ export function Hero() {
               <Button href={APP_URL} color="blue" data-event="Open app" data-event-label="hero">
                 Open the app
               </Button>
+              <Button href={APP_STORE_URL} color="slate" data-event="App Store" data-event-label="hero">
+                App Store
+              </Button>
               <Button href={SELF_HOST_URL} variant="outline" color="blue" data-event="Self-host" data-event-label="hero">
                 Self-host it
               </Button>
             </div>
             <p className="mt-4 text-base tracking-tight text-slate-500">
-              Free. No account. Your progress stays in your browser.
+              Free. No account. Use it in your browser, or get the iPhone app.
             </p>
           </div>
         </div>
