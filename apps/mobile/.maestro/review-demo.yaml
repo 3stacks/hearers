@@ -1,0 +1,368 @@
+# Hearers: the demo for App Review (Guideline 2.1). It shows the typical flow of a new learner.
+#
+# State: a fresh install, with no tradition chosen and nothing learned. Delete Hearers and install it
+# again before each recording. The flow does not use clearState, because clearState can fail on a
+# physical iPhone. The flow also runs on a device with saved data, but the drills then show other
+# answers.
+#
+# Simulator:  install a build of the app, then run
+#               maestro test apps/mobile/.maestro/review-demo.yaml
+# iPhone:     install the TestFlight build. Start the maestro-ios-device bridge for the iPhone, as its
+#             README tells. Start the QuickTime recording of the iPhone screen. Then run
+#               maestro --device <UDID> test apps/mobile/.maestro/review-demo.yaml
+#
+# Selectors: only the visible texts and accessibility labels of the submitted build. The flow needs
+# no change to the source. On iOS, React Navigation gives each tab button the label
+# "<title>, tab, <n> of 4", for example "Library, tab, 2 of 4". iOS has no `back` command: the flow
+# swipes from the left edge, and taps the header back button if the swipe does not work.
+appId: com.lukeboyle.hearers
+name: Hearers review demo
+---
+# 1. Launch. The recording must begin here.
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible: "Memorising"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 2. First run: the app asks once for a tradition (Home.tsx, TraditionPicker).
+- runFlow:
+    when:
+      visible: "Which confessions do you hold\\?"
+    commands:
+      # A pause, so that the reviewer can read the screen. The text never shows.
+      - extendedWaitUntil:
+          visible: "__pause__"
+          timeout: 3000
+          optional: true
+      - tapOn: "Reformed"
+      - waitForAnimationToEnd:
+          timeout: 3000
+
+# 3. Library: the catechisms, confessions, creeds and Scripture in the app.
+- tapOn: "Library, tab, 2 of 4"
+- extendedWaitUntil:
+    visible: "Catechisms"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2500
+    optional: true
+- scroll
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2500
+    optional: true
+- scrollUntilVisible:
+    element:
+      text: ".*Westminster Shorter Catechism.*"
+    direction: UP
+    timeout: 15000
+- tapOn: ".*Westminster Shorter Catechism.*"
+
+# 4. Choose the catechism: start a course of one new answer each day.
+- extendedWaitUntil:
+    visible: "Memorise this in order|New units per day"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2000
+    optional: true
+- tapOn: "1/day"
+- extendedWaitUntil:
+    visible: "New units per day"
+    timeout: 10000
+
+# 5. Open Q. 1 and its proof texts in the King James Version.
+- tapOn: ".*What is the chief end of man\\?.*"
+- extendedWaitUntil:
+    visible: "Learn this|Practise"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2500
+    optional: true
+- tapOn:
+    text: ".*to glorify God.*"
+    optional: true
+- runFlow:
+    when:
+      visible: "Close"
+    commands:
+      - waitForAnimationToEnd:
+          timeout: 3000
+      - extendedWaitUntil:
+          visible: "__pause__"
+          timeout: 3000
+          optional: true
+      - scroll
+      - extendedWaitUntil:
+          visible: "__pause__"
+          timeout: 2000
+          optional: true
+      - tapOn: "Close"
+      - waitForAnimationToEnd:
+          timeout: 3000
+
+# 6. Learn Q. 1: read it, listen to it, then recall it with the first letter of each word.
+- tapOn: "Learn this|Practise"
+- extendedWaitUntil:
+    visible: "Skip to test"
+    timeout: 10000
+- tapOn: "Listen"
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 5000
+    optional: true
+- tapOn: "Skip to test"
+- extendedWaitUntil:
+    visible: "Show word"
+    timeout: 10000
+# "Man's chief end is to glorify God, and to enjoy him for ever." One key for each word.
+- evalScript: ${output.keys = 'mceitggatehfe'}
+- evalScript: ${output.i = 0}
+- repeat:
+    while:
+      visible: "Show word"
+    times: 13
+    commands:
+      - inputText: ${output.keys.charAt(output.i)}
+      - evalScript: ${output.i = output.i + 1}
+# If a key did not arrive, show the remaining words, so that the drill ends.
+- repeat:
+    while:
+      visible: "Show word"
+    times: 40
+    commands:
+      - tapOn: "Show word"
+- extendedWaitUntil:
+    visible: "Continue"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
+- tapOn: "Continue"
+- extendedWaitUntil:
+    visible: "Practise"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2500
+    optional: true
+
+# 7. Go back to the catechism, then to the Library tab.
+- swipe:
+    start: "2%, 50%"
+    end: "90%, 50%"
+    duration: 500
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      notVisible: "New units per day"
+    commands:
+      - tapOn:
+          text: "Back"
+          optional: true
+- extendedWaitUntil:
+    visible: "New units per day"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2000
+    optional: true
+- swipe:
+    start: "2%, 50%"
+    end: "90%, 50%"
+    duration: 500
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      notVisible: "Today, tab, 1 of 4"
+    commands:
+      - tapOn:
+          text: "Back"
+          optional: true
+- extendedWaitUntil:
+    visible: "Today, tab, 1 of 4"
+    timeout: 10000
+
+# 8. Today: the course shows on the home screen. Learn the next answer, Q. 2.
+- tapOn: "Today, tab, 1 of 4"
+- extendedWaitUntil:
+    visible: "Memorising"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
+- tapOn: "Learn one more|Learn \\(\\d+ today\\)"
+- extendedWaitUntil:
+    visible: "Skip to test"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
+- tapOn: "Skip to test"
+- extendedWaitUntil:
+    visible: "Show word"
+    timeout: 10000
+# "The Word of God, which is contained in the Scriptures of the Old and New Testaments, is the
+# only rule to direct us how we may glorify and enjoy him."
+- evalScript: ${output.keys = 'twogwicitsotoantitortduhwmgaeh'}
+- evalScript: ${output.i = 0}
+- repeat:
+    while:
+      visible: "Show word"
+    times: 30
+    commands:
+      - inputText: ${output.keys.charAt(output.i)}
+      - evalScript: ${output.i = output.i + 1}
+- repeat:
+    while:
+      visible: "Show word"
+    times: 60
+    commands:
+      - tapOn: "Show word"
+- extendedWaitUntil:
+    visible: "Continue"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
+- tapOn: "Continue"
+- extendedWaitUntil:
+    visible: "Memorising"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2500
+    optional: true
+
+# 9. Study: the harmony of the Apostles' and Nicene Creeds.
+- scrollUntilVisible:
+    element:
+      text: ".*Apostles' and Nicene Creeds.*"
+    direction: DOWN
+    timeout: 15000
+    centerElement: true
+- tapOn: ".*Apostles' and Nicene Creeds.*"
+- extendedWaitUntil:
+    visible: "Apostles' and Nicene Creeds"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2500
+    optional: true
+- scroll
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2500
+    optional: true
+- swipe:
+    start: "2%, 50%"
+    end: "90%, 50%"
+    duration: 500
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      notVisible: "Today, tab, 1 of 4"
+    commands:
+      - tapOn:
+          text: "Back"
+          optional: true
+- extendedWaitUntil:
+    visible: "Today, tab, 1 of 4"
+    timeout: 10000
+
+# 10. Progress: streak, answers learned, activity, the forecast of reviews.
+- tapOn: "Progress, tab, 3 of 4"
+- extendedWaitUntil:
+    visible: "answers learned"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
+- scrollUntilVisible:
+    element:
+      text: "Coming up"
+    direction: DOWN
+    timeout: 10000
+    centerElement: true
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
+
+# 11. Settings: tradition, typing, and the daily reminder.
+- tapOn: "Settings, tab, 4 of 4"
+- extendedWaitUntil:
+    visible: "Tradition"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
+- scrollUntilVisible:
+    element:
+      text: "Turn on|Turn off"
+    direction: DOWN
+    timeout: 15000
+    centerElement: true
+- runFlow:
+    when:
+      visible: "Turn on"
+    commands:
+      - tapOn: "Turn on"
+      # The iOS permission prompt shows only on the first request.
+      - tapOn:
+          text: "Allow"
+          optional: true
+      - extendedWaitUntil:
+          visible: "On\\. You get a notification.*"
+          timeout: 10000
+          optional: true
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
+
+# 12. Sync (optional), your data, and the sources and licences of the texts.
+- scrollUntilVisible:
+    element:
+      text: "Your data"
+    direction: DOWN
+    timeout: 15000
+    centerElement: true
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 2500
+    optional: true
+- scrollUntilVisible:
+    element:
+      text: "Sources"
+    direction: DOWN
+    timeout: 15000
+- scroll
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 4000
+    optional: true
+
+# 13. End on the home screen.
+- tapOn: "Today, tab, 1 of 4"
+- extendedWaitUntil:
+    visible: "Memorising"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "__pause__"
+    timeout: 3000
+    optional: true
