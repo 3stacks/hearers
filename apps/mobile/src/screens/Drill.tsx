@@ -7,7 +7,7 @@ import { chunkResults, cycleGrade, gradeLabel, toRecord, type WordStatus } from 
 import { normWord, tokenize, type Token } from '../../../../src/lib/grade.ts'
 import type { InputMode } from '../../../../src/store/db.ts'
 import { recordDrill, type ChunkResult } from '../../../../src/store/srs.ts'
-import { Button, Row, Spacer, T } from '../components/ui.tsx'
+import { Button, Row, s, Spacer, T } from '../components/ui.tsx'
 import { speak, stopSpeaking } from '../lib/speech.ts'
 import { font, gradeColour, useColors, type Colors } from '../lib/theme.ts'
 
@@ -197,7 +197,7 @@ export function Drill({ unit, docId, inputMode, kind, dueChunks, whole, fade = t
   if (stage === 'read')
     return (
       <View style={[st.fill, { backgroundColor: c.bg }]}>
-        <ScrollView contentContainerStyle={st.body}>
+        <ScrollView contentContainerStyle={[st.body, s.column]}>
           <Prompt unit={unit} />
           <Text style={[st.text, { color: c.text }]}>
             {unit.chunks.map(([s, e], i) => (
@@ -208,19 +208,21 @@ export function Drill({ unit, docId, inputMode, kind, dueChunks, whole, fade = t
           </Text>
           {memoryAid}
         </ScrollView>
-        <Row style={[st.bar, bottom, { borderTopColor: c.line, backgroundColor: c.bg }]}>
-          <Button kind="ghost" title="Listen" onPress={() => speak(unit.text)} />
-          <Spacer />
-          <Button kind="ghost" title="Skip to test" onPress={() => restart('recall')} />
-          <Button kind="primary" title="Trace it" onPress={() => restart('trace')} />
-        </Row>
+        <View style={[st.bar, bottom, { borderTopColor: c.line, backgroundColor: c.bg }]}>
+          <Row style={s.column}>
+            <Button kind="ghost" title="Listen" onPress={() => speak(unit.text)} />
+            <Spacer />
+            <Button kind="ghost" title="Skip to test" onPress={() => restart('recall')} />
+            <Button kind="primary" title="Trace it" onPress={() => restart('trace')} />
+          </Row>
+        </View>
       </View>
     )
 
   if (stage === 'done' && results)
     return (
       <View style={[st.fill, { backgroundColor: c.bg }]}>
-        <ScrollView contentContainerStyle={st.body}>
+        <ScrollView contentContainerStyle={[st.body, s.column]}>
           <Prompt unit={unit} />
           <Words unit={unit} tokens={tokens} status={status} chunkOf={chunkOf} tested={tested} stage={stage} current={-1} buffer="" c={c} />
           {memoryAid}
@@ -241,18 +243,20 @@ export function Drill({ unit, docId, inputMode, kind, dueChunks, whole, fade = t
             ))}
           </View>
         </ScrollView>
-        <Row style={[st.bar, bottom, { borderTopColor: c.line, backgroundColor: c.bg }]}>
-          <T v="smallMuted" style={st.flex}>
-            {record ? 'Tap a grade to change it.' : 'Practice only: your schedule is unchanged.'}
-          </T>
-          <Button kind="primary" title="Continue" onPress={() => void save().then(() => onDone(results))} />
-        </Row>
+        <View style={[st.bar, bottom, { borderTopColor: c.line, backgroundColor: c.bg }]}>
+          <Row style={s.column}>
+            <T v="smallMuted" style={st.flex}>
+              {record ? 'Tap a grade to change it.' : 'Practice only: your schedule is unchanged.'}
+            </T>
+            <Button kind="primary" title="Continue" onPress={() => void save().then(() => onDone(results))} />
+          </Row>
+        </View>
       </View>
     )
 
   return (
     <KeyboardAvoidingView style={[st.fill, { backgroundColor: c.bg }]} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
-      <ScrollView contentContainerStyle={st.body} keyboardShouldPersistTaps="always">
+      <ScrollView contentContainerStyle={[st.body, s.column]} keyboardShouldPersistTaps="always">
         <Prompt unit={unit} />
         <T v="smallMuted">
           {stage === 'trace' ? 'Trace: type the ' : stage === 'fade' ? 'Fade: half the words are gone. Type the ' : 'Recall: type the '}
@@ -290,13 +294,15 @@ export function Drill({ unit, docId, inputMode, kind, dueChunks, whole, fade = t
         caretHidden
         accessibilityLabel="Type here"
       />
-      <Row style={[st.bar, !keyboard && bottom, { borderTopColor: c.line, backgroundColor: c.bg }]}>
-        <Text style={[st.progress, { color: c.muted }]}>
-          {cursor}/{order.length}
-        </Text>
-        <Spacer />
-        <Button kind="ghost" title="Show word" onPress={hint} />
-      </Row>
+      <View style={[st.bar, !keyboard && bottom, { borderTopColor: c.line, backgroundColor: c.bg }]}>
+        <Row style={s.column}>
+          <Text style={[st.progress, { color: c.muted }]}>
+            {cursor}/{order.length}
+          </Text>
+          <Spacer />
+          <Button kind="ghost" title="Show word" onPress={hint} />
+        </Row>
+      </View>
     </KeyboardAvoidingView>
   )
 }

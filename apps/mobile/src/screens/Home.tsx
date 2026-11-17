@@ -147,7 +147,7 @@ function Tile({ title, sub, onPress }: { title: string; sub: string; onPress: ()
       onPress={onPress}
       accessibilityRole="link"
       style={({ pressed }) => [st.tile, { backgroundColor: pressed ? c.surface2 : c.surface, borderColor: c.line }]}>
-      <View style={st.flexShrink}>
+      <View style={st.flex}>
         <Text style={[st.tileTitle, { color: c.text }]}>{title}</Text>
         <Text style={[st.tileSub, { color: c.muted }]}>{sub}</Text>
       </View>
@@ -195,6 +195,7 @@ function greeting() {
 
 const st = StyleSheet.create({
   flexShrink: { flexShrink: 1 },
+  flex: { flex: 1 },
   streak: { flexDirection: 'row', alignItems: 'center', gap: 4, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 5 },
   streakText: { fontFamily: font.bold, fontSize: 14 },
   tile: { flexDirection: 'row', alignItems: 'center', gap: 12, borderWidth: StyleSheet.hairlineWidth, borderRadius: 14, padding: 16 },

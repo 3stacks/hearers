@@ -6,7 +6,7 @@ import { loadDoc } from '../../../../src/data/load.ts'
 import type { Unit } from '../../../../src/data/types.ts'
 import { db, removeRows } from '../../../../src/store/db.ts'
 import { unitProgress, type UnitProgress } from '../../../../src/store/srs.ts'
-import { Button, Card, Loading, Row, Segmented, Spacer, T, useScreenData } from '../components/ui.tsx'
+import { Button, Card, Loading, Row, s, Segmented, Spacer, T, useScreenData } from '../components/ui.tsx'
 import { font, useColors } from '../lib/theme.ts'
 import { AddVerses } from './AddVerses.tsx'
 
@@ -108,7 +108,7 @@ export function DocView({ docId }: { docId: string }) {
       <Stack.Screen options={{ title: doc.short }} />
       <SectionList
         style={{ backgroundColor: c.bg }}
-        contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 32 }}
+        contentContainerStyle={[s.column, { padding: 16, paddingBottom: insets.bottom + 32 }]}
         contentInsetAdjustmentBehavior="automatic"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"

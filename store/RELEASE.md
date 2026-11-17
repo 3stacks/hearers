@@ -43,7 +43,8 @@ the Google Play developer account. `store/listing.md` has the text of each store
    ```
 
 6. Wait for Apple to process the build. This takes 5 to 30 minutes. Then install it from TestFlight
-   on your iPhone and test it.
+   on your iPhone and on your iPad, and test it. The app runs on the iPad in all four orientations
+   and in Split View. On the iPad, do the checks in "iPad checks" below.
 
 7. In App Store Connect, complete the version page:
    - Copy each field from `store/listing.md`.
@@ -80,7 +81,19 @@ the Google Play developer account. `store/listing.md` has the text of each store
 
 The screenshots are in `store/screenshots/`. Upload `ios/` to App Store Connect and `play/` to
 Google Play, in the order of the file names. If App Store Connect asks for the 6.3-inch display, use
-`ios-6.3/`. `store/screenshots/README.md` tells how to make them again.
+`ios-6.3/`. For the 13-inch iPad display, upload `ipad/`. App Store Connect needs the iPad set
+because the app supports the iPad. `store/screenshots/README.md` tells how to make them again.
+
+## iPad checks
+
+The web build cannot show these things. Check them on a real iPad before you submit:
+
+- Turn the iPad to each of the four orientations. The screens must turn and stay in the centre.
+- Open Hearers in Split View and in Slide Over. Change the width of the split.
+- Do a drill with the on-screen keyboard. The bar with "Show word" must stay above the keyboard.
+- Do a drill with a hardware keyboard.
+- Open a proof text. The sheet opens as a form sheet in the centre of the screen.
+- Check the safe areas at the top and the bottom in each orientation.
 
 ## Each later release
 

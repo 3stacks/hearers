@@ -1,5 +1,7 @@
 // Store screenshots in the Blinders style: one wide scene, cut into store slots.
-// node compose.cjs <config.json> <outDir>
+// node compose.cjs <config.json> <outDir> [target ...]
+// With no target, it makes ios, ios-6.3 and play. The ipad target is separate: name it.
+// The ipad target takes each shot from raw-ipad/ in place of raw/.
 // Config: { bg: [c1, c2], accent, ink, sub, motif: 'staff'|'none', panels: [{ title, body, shot }] }
 const sharp = require('sharp')
 const fs = require('fs')
@@ -16,7 +18,12 @@ const TARGETS = {
   ios: { W: 1320, H: 2868, phoneW: 0.8, phoneTop: 0.215, title: 104, body: 46, island: true },
   'ios-6.3': { W: 1206, H: 2622, phoneW: 0.8, phoneTop: 0.215, title: 95, body: 42, island: true },
   play: { W: 1080, H: 1920, phoneW: 0.64, phoneTop: 0.245, title: 80, body: 36, island: false },
+  // 13-inch iPad. A tablet frame: an even thin bezel, small corners, no camera cut-out.
+  ipad: { W: 2064, H: 2752, phoneW: 0.7, phoneTop: 0.265, title: 132, body: 58, tablet: true, raw: 'raw-ipad' },
 }
+const DEFAULT_TARGETS = ['ios', 'ios-6.3', 'play']
+const names = process.argv.slice(4)
+for (const n of names) if (!TARGETS[n]) throw new Error(`Unknown target: ${n}`)
 
 function background(t, n) {
   const { W, H } = t
@@ -85,23 +92,25 @@ function text(t, n) {
 /** The screen in a plain phone frame, with a status bar strip in the colour of the app header. */
 async function phone(file, t) {
   const w = Math.round(t.W * t.phoneW)
-  const bezel = Math.round(w * 0.028)
+  const bezel = Math.round(w * (t.tablet ? 0.02 : 0.028))
   const sw = w - bezel * 2
   const raw = sharp(file)
   const meta = await raw.metadata()
   const sh = Math.round((meta.height / meta.width) * sw)
-  const status = Math.round(sw * 0.12)
+  const status = Math.round(sw * (t.tablet ? 0.03 : 0.12))
   const top = await sharp(file).extract({ left: 2, top: 2, width: 1, height: 1 }).raw().toBuffer()
   const [r, g, b] = top
   const shot = await sharp(file).resize({ width: sw }).toBuffer()
   const screenH = status + sh
   const h = screenH + bezel * 2
-  const rOuter = Math.round(w * 0.13)
+  const rOuter = Math.round(w * (t.tablet ? 0.025 : 0.13))
   const rInner = rOuter - bezel
-  const cam = t.island
+  const cam = t.tablet
+    ? ''
+    : t.island
     ? `<rect x="${w / 2 - sw * 0.15}" y="${bezel + status * 0.28}" width="${sw * 0.3}" height="${status * 0.42}" rx="${status * 0.21}" fill="#000"/>`
     : `<circle cx="${w / 2}" cy="${bezel + status * 0.5}" r="${status * 0.16}" fill="#000"/>`
-  const time = `<text x="${bezel + sw * 0.13}" y="${bezel + status * 0.62}" text-anchor="middle" font-family="Inter" font-weight="600" font-size="${status * 0.3}" fill="${r + g + b > 380 ? '#000' : '#fff'}">9:41</text>`
+  const time = `<text x="${bezel + sw * (t.tablet ? 0.04 : 0.13)}" y="${bezel + status * (t.tablet ? 0.68 : 0.62)}" text-anchor="middle" font-family="Inter" font-weight="600" font-size="${status * (t.tablet ? 0.5 : 0.3)}" fill="${r + g + b > 380 ? '#000' : '#fff'}">9:41</text>`
   const screen = await sharp({ create: { width: sw, height: screenH, channels: 4, background: { r, g, b, alpha: 1 } } })
     .composite([{ input: shot, top: status, left: 0 }])
     .png()
@@ -131,11 +140,12 @@ async function shadow(img) {
 }
 
 ;(async () => {
-  for (const [name, t] of Object.entries(TARGETS)) {
+  for (const name of names.length ? names : DEFAULT_TARGETS) {
+    const t = TARGETS[name]
     const n = cfg.panels.length
     const layers = [{ input: text(t, n), top: 0, left: 0 }]
     for (const [i, p] of cfg.panels.entries()) {
-      const { img, pad } = await shadow(await phone(path.resolve(base, p.shot), t))
+      const { img, pad } = await shadow(await phone(path.resolve(base, t.raw ? p.shot.replace(/^raw\//, `${t.raw}/`) : p.shot), t))
       const m = await sharp(img).metadata()
       const top = Math.round(t.H * t.phoneTop) - pad
       // Let the phone run off the bottom edge, as many store listings do.

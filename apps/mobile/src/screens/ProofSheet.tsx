@@ -6,7 +6,7 @@ import { addVerse, loadPassageById, sibHref } from '../../../../src/data/load.ts
 import type { Note } from '../../../../src/data/types.ts'
 import { formatPassage, passageFromId } from '../../../../src/lib/refs.ts'
 import { useAsync } from '../../../../src/useAsync.ts'
-import { Button, Link, Row, T } from '../components/ui.tsx'
+import { Button, Link, Row, s, T } from '../components/ui.tsx'
 import { open } from '../lib/open.ts'
 import { font, useColors } from '../lib/theme.ts'
 
@@ -25,15 +25,17 @@ export function ProofSheet({ content, onClose }: { content: SheetContent | undef
     <Modal visible={!!content} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
       {content && (
         <View style={[st.sheet, { backgroundColor: c.bg, paddingTop: Platform.OS === 'ios' ? 8 : insets.top }]}>
-          <Row style={[st.head, { borderBottomColor: c.line }]}>
-            <Text style={[st.phrase, { color: c.text }]} numberOfLines={3}>
-              “{content.phrase}”
-            </Text>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={12}>
-              <Text style={[st.close, { color: c.accent }]}>Done</Text>
-            </Pressable>
-          </Row>
-          <ScrollView contentContainerStyle={[st.body, { paddingBottom: insets.bottom + 32 }]}>
+          <View style={[st.head, { borderBottomColor: c.line }]}>
+            <Row style={[s.column, st.headRow]}>
+              <Text style={[st.phrase, { color: c.text }]} numberOfLines={3}>
+                “{content.phrase}”
+              </Text>
+              <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={12}>
+                <Text style={[st.close, { color: c.accent }]}>Done</Text>
+              </Pressable>
+            </Row>
+          </View>
+          <ScrollView contentContainerStyle={[st.body, s.column, { paddingBottom: insets.bottom + 32 }]}>
             {content.parallel && (
               <T>
                 <Text style={{ color: c.muted }}>{content.parallel.label}: </Text>
@@ -109,7 +111,8 @@ function Passage({ id }: { id: string }) {
 const st = StyleSheet.create({
   flex: { flex: 1 },
   sheet: { flex: 1 },
-  head: { paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, alignItems: 'flex-start' },
+  head: { paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth },
+  headRow: { alignItems: 'flex-start' },
   phrase: { flex: 1, fontFamily: font.semibold, fontSize: 16, lineHeight: 22 },
   close: { fontFamily: font.semibold, fontSize: 16, paddingTop: 1 },
   body: { padding: 16, gap: 14 },

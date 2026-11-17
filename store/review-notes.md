@@ -10,6 +10,8 @@ in place of `[video link]`. The "Manual steps" section is for the developer only
 
 Video on a physical iPhone: [video link]
 
+The app also runs on the iPad. The features and the steps are the same on the iPad.
+
 The video starts at the launch of the app. It then shows each main feature.
 
 **2. Purpose and audience**

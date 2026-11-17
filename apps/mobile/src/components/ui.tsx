@@ -30,6 +30,9 @@ export function useScreenData<T>(fn: () => Promise<T>, deps: DependencyList) {
   return [value, error, reload] as const
 }
 
+/** The widest a column of content grows. On an iPad the column stays in the centre. */
+export const MAX_WIDTH = 720
+
 /** A screen that scrolls. Tab screens leave the bottom inset to the tab bar. */
 export function Screen({ children, tab = false, style }: { children: ReactNode; tab?: boolean; style?: StyleProp<ViewStyle> }) {
   const c = useColors()
@@ -37,7 +40,7 @@ export function Screen({ children, tab = false, style }: { children: ReactNode; 
   return (
     <ScrollView
       style={{ backgroundColor: c.bg }}
-      contentContainerStyle={[s.screen, { paddingBottom: (tab ? 0 : insets.bottom) + 32 }, style]}
+      contentContainerStyle={[s.screen, s.column, { paddingBottom: (tab ? 0 : insets.bottom) + 32 }, style]}
       contentInsetAdjustmentBehavior="automatic"
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="on-drag">
@@ -206,6 +209,7 @@ export const s = StyleSheet.create({
   flex: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
   screen: { padding: 16, gap: 20 },
+  column: { width: '100%', maxWidth: MAX_WIDTH, alignSelf: 'center' },
   section: { gap: 10 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   wrap: { flexWrap: 'wrap' },

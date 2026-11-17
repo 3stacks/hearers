@@ -10,7 +10,7 @@
     "backgroundColor": "#f8fafc",
     "ios": {
       "bundleIdentifier": "com.lukeboyle.hearers",
-      "supportsTablet": false,
+      "supportsTablet": true,
       "config": {
         "usesNonExemptEncryption": false
       }
