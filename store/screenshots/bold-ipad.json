@@ -1,0 +1,146 @@
+{
+  "raw": "raw-ipad",
+  "landscape": false,
+  "palette": {
+    "loud": "#f6b92b",
+    "loudInk": "#2b0f0f",
+    "mid": "#8a3434",
+    "dark": "#2b0f0f",
+    "pop": "#f6c95a"
+  },
+  "cards": [
+    {
+      "shot": "trace.png",
+      "tilt": 4,
+      "dx": -30,
+      "lines": [
+        {
+          "t": "Learn it",
+          "size": 170
+        },
+        {
+          "t": "by heart",
+          "size": 300,
+          "key": true
+        }
+      ],
+      "pops": [
+        {
+          "crop": [
+            330,
+            140,
+            1180,
+            250
+          ],
+          "w": 1250,
+          "x": 420,
+          "y": 520,
+          "rot": -3
+        }
+      ],
+      "pills": [
+        {
+          "t": "Type the first letters",
+          "x": 110,
+          "y": 712.72,
+          "abs": true,
+          "kind": "dark",
+          "size": 58
+        }
+      ]
+    },
+    {
+      "shot": "proof.png",
+      "tilt": -4,
+      "dx": 30,
+      "lines": [
+        {
+          "t": "Read the",
+          "size": 160
+        },
+        {
+          "t": "proof texts",
+          "size": 225,
+          "key": true
+        }
+      ],
+      "pops": [
+        {
+          "crop": [
+            336,
+            125,
+            1392,
+            300
+          ],
+          "w": 1300,
+          "x": 80,
+          "y": 520,
+          "rot": 3
+        }
+      ],
+      "pills": []
+    },
+    {
+      "shot": "library.png",
+      "tilt": 3,
+      "dx": -20,
+      "lines": [
+        {
+          "t": "Creeds and",
+          "size": 160
+        },
+        {
+          "t": "confessions",
+          "size": 205,
+          "key": true
+        }
+      ],
+      "pops": [
+        {
+          "crop": [
+            336,
+            305,
+            1392,
+            405
+          ],
+          "w": 1250,
+          "x": 430,
+          "y": 560,
+          "rot": -3
+        }
+      ],
+      "pills": []
+    },
+    {
+      "shot": "doc.png",
+      "tilt": -4,
+      "dx": 30,
+      "lines": [
+        {
+          "t": "Set your",
+          "size": 170
+        },
+        {
+          "t": "pace",
+          "size": 420,
+          "key": true
+        }
+      ],
+      "pops": [
+        {
+          "crop": [
+            336,
+            348,
+            1392,
+            225
+          ],
+          "w": 1300,
+          "x": 80,
+          "y": 600,
+          "rot": 3
+        }
+      ],
+      "pills": []
+    }
+  ]
+}
