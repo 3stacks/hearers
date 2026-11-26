@@ -92,6 +92,7 @@ No account is needed. Choose a tradition (Reformed or Lutheran), then open a cat
 | Content rating | Complete the IARC questionnaire. Answer "No" to each question. The result is "Everyone". |
 | Target audience | 13 and over. Do not select an age group under 13, or the Families policy applies. |
 | Ads | No ads |
+| Developer details | The developer account is an organisation account of a trader. Google Play shows the company name, the address, the email address and the phone number on the store page. |
 | Data safety | No data collected. No data shared. Data stays on the device. |
 | App access | All functionality is available without special access. |
 | Notifications | The app asks for permission for daily reminders. |
@@ -105,6 +106,7 @@ No account is needed. Choose a tradition (Reformed or Lutheran), then open a cat
 | iPhone screenshots | 1320 × 2868 (6.9-inch display), 3 to 10 | Required |
 | iPad screenshots | 2064 × 2752 (13-inch display), 3 to 10 | Required, because the app supports the iPad. `store/screenshots/ipad/` |
 | Play phone screenshots | 1080 × 1920 or larger, 2 to 8 | Required |
+| Play phone screenshots, bold set | 1080 × 1920 | `store/screenshots/bold/play/`. Use this set for the store page. |
 | Play feature graphic | 1024 × 500 | Required. `store/feature-graphic.png` |
 | Play icon | 512 × 512 | Required. `store/play-icon.png` |
 
