@@ -12,6 +12,7 @@ brackets.
 | Support URL | https://github.com/3stacks/hearers/issues |
 | Marketing URL | https://hearers.app |
 | Privacy policy URL | https://hearers.app/privacy/ |
+| Terms of service URL | https://hearers.app/terms/ |
 | Copyright | 2026 Luke Boyle |
 | Price | Free |
 

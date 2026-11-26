@@ -21,6 +21,7 @@ export function Footer() {
           <Link href={SELF_HOST_URL}>Self-hosting</Link>
           <Link href={KOFI_URL}>Ko-fi</Link>
           <Link href="/privacy/">Privacy</Link>
+          <Link href="/terms/">Terms</Link>
         </nav>
         <p>Made by Luke Boyle. Free to use.</p>
       </div>
